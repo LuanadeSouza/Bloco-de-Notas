@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.luanadev.ceepapplication.R;
 import com.luanadev.ceepapplication.model.Nota;
 
@@ -14,8 +16,8 @@ import java.util.List;
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
 
-    private List<Nota> notas;
-    private Context context;
+    private final List<Nota> notas;
+    private final Context context;
 
     public ListaNotasAdapter(Context context, List<Nota> notas) {
         this.context = context;
