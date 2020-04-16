@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.luanadev.ceepapplication.R;
@@ -14,23 +13,26 @@ import com.luanadev.ceepapplication.dao.NotaDAO;
 import com.luanadev.ceepapplication.model.Nota;
 import com.luanadev.ceepapplication.ui.adapter.ListaNotasAdapter;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class ListaNotasActivity extends AppCompatActivity {
 
+    public static final String NOTA = "nota";
     private NotaDAO dao = new NotaDAO();
     private ListaNotasAdapter adapter;
-    private List<Nota> todasNotas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
 
-        todasNotas = notasExemplo();
+        List<Nota> todasNotas = dao.todos();
         configuraRecyclerView(todasNotas);
 
+        botaoInsereNota();
+    }
+
+    private void botaoInsereNota() {
         TextView insereNotaBotao = findViewById(R.id.lista_notas_insere_nota);
         insereNotaBotao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,8 +45,8 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int resquetCode, int resultCode, Intent data) {
-        if (resquetCode == 1 && resultCode == 2 && data.hasExtra("nota")) {
-            Nota notaRecebida = (Nota) data.getSerializableExtra("nota");
+        if (resquetCode == 1 && resultCode == 2 && data.hasExtra(NOTA)) {
+            Nota notaRecebida = (Nota) data.getSerializableExtra(NOTA);
             new NotaDAO().insere(notaRecebida);
             adapter.adiciona(notaRecebida);
         }
@@ -54,10 +56,6 @@ public class ListaNotasActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    private List<Nota> notasExemplo() {
-        return dao.todos();
     }
 
     private void configuraRecyclerView(List<Nota> todasNotas) {
