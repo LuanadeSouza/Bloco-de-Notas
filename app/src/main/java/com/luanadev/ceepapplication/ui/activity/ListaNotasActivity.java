@@ -7,12 +7,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.luanadev.ceepapplication.R;
 import com.luanadev.ceepapplication.dao.NotaDAO;
 import com.luanadev.ceepapplication.model.Nota;
 import com.luanadev.ceepapplication.ui.adapter.ListaNotasAdapter;
+import com.luanadev.ceepapplication.ui.helper.NotaItemTouchHelperCallback;
 import com.luanadev.ceepapplication.ui.interfaces.OnItemClickListener;
 
 import java.util.List;
@@ -81,7 +83,8 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void configuraRecyclerView(List<Nota> todasNotas) {
         configuraAdapter(todasNotas, listaNotas);
-
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NotaItemTouchHelperCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(listaNotas);
     }
 
     private boolean temNota(Intent data) {
