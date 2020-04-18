@@ -38,6 +38,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         List<Nota> todasNotas = dao.todos();
         configuraRecyclerView(todasNotas);
         botaoInsereNota();
+        pegarTodasNotas();
 
     }
 
@@ -56,6 +57,9 @@ public class ListaNotasActivity extends AppCompatActivity {
         });
     }
 
+    private List<Nota>pegarTodasNotas(){
+        return dao.todos();
+    }
     @Override
     protected void onActivityResult(int resquetCode, int resultCode, Intent data) {
         super.onActivityResult(resquetCode, resultCode, data);
@@ -88,7 +92,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private boolean temNota(Intent data) {
-        return data.hasExtra(NOTA);
+        return data != null && data.hasExtra(NOTA);
     }
 
     private void configuraAdapter(List<Nota> todasNotas, RecyclerView listaNotas) {

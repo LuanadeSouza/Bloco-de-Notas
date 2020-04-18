@@ -18,6 +18,7 @@ import static com.luanadev.ceepapplication.ui.activity.ListaNotasActivity.POSITI
 public class FormularioNotaActivity extends AppCompatActivity {
 
     public static final String NOTA = "nota";
+    public static final String TITLE_NOTAS = "Notas";
     private int positionRecebida = -1;
     private Nota notaRecebida;
     private TextView titulo;
@@ -27,9 +28,11 @@ public class FormularioNotaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nota);
+        setTitle(TITLE_NOTAS);
         initView();
         Intent dadosRecebidos = getIntent();
         if (dadosRecebidos.hasExtra(NOTA)) {
+            setTitle("Altera Nota");
             notaRecebida = (Nota) dadosRecebidos.getSerializableExtra(NOTA);
             positionRecebida = dadosRecebidos.getIntExtra(POSITION, -1);
             preencheCampos();
