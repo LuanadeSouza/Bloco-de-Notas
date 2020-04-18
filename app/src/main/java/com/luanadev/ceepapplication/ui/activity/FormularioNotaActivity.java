@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,30 +13,38 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.luanadev.ceepapplication.R;
 import com.luanadev.ceepapplication.model.Nota;
 
-import java.io.Serializable;
-
 import static com.luanadev.ceepapplication.ui.activity.ListaNotasActivity.POSITION;
 
 public class FormularioNotaActivity extends AppCompatActivity {
 
     public static final String NOTA = "nota";
-    private int positionRecebida;
+    private int positionRecebida = -1;
     private Nota notaRecebida;
+    private TextView titulo;
+    private TextView descricao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nota);
+        initView();
         Intent dadosRecebidos = getIntent();
-        if (dadosRecebidos.hasExtra(NOTA)&& dadosRecebidos.hasExtra(POSITION)){
+        if (dadosRecebidos.hasExtra(NOTA)) {
             notaRecebida = (Nota) dadosRecebidos.getSerializableExtra(NOTA);
             positionRecebida = dadosRecebidos.getIntExtra(POSITION, -1);
-            TextView titulo = findViewById(R.id.formulario_nota_titulo);
-            titulo.setText(notaRecebida.getTitulo());
-            TextView descricao = findViewById(R.id.formulario_nota_descricao);
-            descricao.setText(notaRecebida.getDescricao());
+            preencheCampos();
         }
 
+    }
+
+    private void initView() {
+        titulo = findViewById(R.id.formulario_nota_titulo);
+        descricao = findViewById(R.id.formulario_nota_descricao);
+    }
+
+    private void preencheCampos() {
+        titulo.setText(notaRecebida.getTitulo());
+        descricao.setText(notaRecebida.getDescricao());
     }
 
     @Override
@@ -64,8 +71,6 @@ public class FormularioNotaActivity extends AppCompatActivity {
     }
 
     private Nota criaNota() {
-        EditText titulo = findViewById(R.id.formulario_nota_titulo);
-        EditText descricao = findViewById(R.id.formulario_nota_descricao);
         return new Nota(titulo.getText().toString(), descricao.getText().toString());
     }
 }

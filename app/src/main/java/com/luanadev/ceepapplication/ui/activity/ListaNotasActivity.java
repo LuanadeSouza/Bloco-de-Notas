@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,21 +24,27 @@ public class ListaNotasActivity extends AppCompatActivity {
     private NotaDAO dao = new NotaDAO();
     private ListaNotasAdapter adapter;
     private Nota notaRecebida;
+    private RecyclerView listaNotas;
+    private TextView insereNotaBotao;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
-
+        initView();
         List<Nota> todasNotas = dao.todos();
         configuraRecyclerView(todasNotas);
         botaoInsereNota();
 
     }
 
+    private void initView() {
+        listaNotas = findViewById(R.id.lista_notas_recyclerview);
+        insereNotaBotao = findViewById(R.id.lista_notas_insere_nota);
+    }
+
     private void botaoInsereNota() {
-        TextView insereNotaBotao = findViewById(R.id.lista_notas_insere_nota);
         insereNotaBotao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,11 +62,15 @@ public class ListaNotasActivity extends AppCompatActivity {
             dao.insere(notaRecebida);
             adapter.adiciona(notaRecebida);
         }
-        if (resquetCode == 2 && resquetCode == 2 && temNota(data) && data.hasExtra(POSITION)) {
+        if (resquetCode == 2 && resquetCode == 2 && temNota(data)) {
             notaRecebida = (Nota) data.getSerializableExtra(NOTA);
             int positionRecebida = data.getIntExtra(POSITION, -1);
-            dao.altera(positionRecebida, notaRecebida);
-            adapter.altera(positionRecebida, notaRecebida);
+            if (positionRecebida > -1) {
+                dao.altera(positionRecebida, notaRecebida);
+                adapter.altera(positionRecebida, notaRecebida);
+            } else {
+                Toast.makeText(this, "Erro ao Alterar a Nota", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -69,7 +80,6 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void configuraRecyclerView(List<Nota> todasNotas) {
-        RecyclerView listaNotas = findViewById(R.id.lista_notas_recyclerview);
         configuraAdapter(todasNotas, listaNotas);
 
     }
@@ -85,11 +95,15 @@ public class ListaNotasActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(Nota nota, int position) {
-                Intent abreFormularioComNota = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
-                abreFormularioComNota.putExtra(NOTA, nota);
-                abreFormularioComNota.putExtra(POSITION, position);
-                startActivityForResult(abreFormularioComNota, 2);
+                alteraFormulario(nota, position);
             }
         });
+    }
+
+    private void alteraFormulario(Nota nota, int position) {
+        Intent abreFormularioComNota = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
+        abreFormularioComNota.putExtra(NOTA, nota);
+        abreFormularioComNota.putExtra(POSITION, position);
+        startActivityForResult(abreFormularioComNota, 2);
     }
 }
