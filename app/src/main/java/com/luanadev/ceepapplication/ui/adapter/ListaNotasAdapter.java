@@ -13,6 +13,7 @@ import com.luanadev.ceepapplication.R;
 import com.luanadev.ceepapplication.model.Nota;
 import com.luanadev.ceepapplication.ui.interfaces.OnItemClickListener;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
@@ -56,6 +57,11 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     public void remove(int position) {
         notas.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void troca(int positionInicial, int positionFinal) {
+        Collections.swap(notas, positionInicial, positionFinal);
         notifyDataSetChanged();
     }
 

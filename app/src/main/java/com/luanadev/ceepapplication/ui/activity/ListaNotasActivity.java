@@ -91,7 +91,6 @@ public class ListaNotasActivity extends AppCompatActivity {
         return data.hasExtra(NOTA);
     }
 
-
     private void configuraAdapter(List<Nota> todasNotas, RecyclerView listaNotas) {
         adapter = new ListaNotasAdapter(this, todasNotas);
         listaNotas.setAdapter(adapter);

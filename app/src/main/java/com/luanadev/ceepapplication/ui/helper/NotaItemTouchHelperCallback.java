@@ -17,13 +17,18 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int marcacoesDeslize = ItemTouchHelper.LEFT| ItemTouchHelper.RIGHT;
-        return makeMovementFlags(0,marcacoesDeslize);
+        int marcacoesDeslize = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        int marcacoesArrastar = ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        return makeMovementFlags(marcacoesArrastar, marcacoesDeslize);
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        return false;
+        int positionInicial = viewHolder.getAdapterPosition();
+        int positionFinal = target.getAdapterPosition();
+        new NotaDAO().troca(positionInicial, positionFinal);
+        adapter.troca(positionInicial, positionFinal);
+        return true;
     }
 
     @Override
